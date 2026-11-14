@@ -1,24 +1,32 @@
-Squad Status HUD 1.0.0 — English / Manual Install
+Squad Status HUD 1.0.0 — Installation
 15 November 2026 (15/11/2026)
 
-Requires UE4SS. This archive contains Lua scripts only, with no installer or loader binaries.
-Supported game: Starship Troopers: Ultimate Bug War!, Steam build 22832378.
+Close the game before you start.
 
-1. Close the game.
-2. Install UE4SS from its official release:
-   https://github.com/UE4SS-RE/RE-UE4SS/releases
-   Tested build: v4.0.0-6-gef15eba8.
-   Follow the upstream installation instructions. This mod uses the ue4ss/Mods layout.
-3. Copy the included ue4ss folder into:
-   <game folder>/StarshipTroopers_UBW/Binaries/Win64/
-4. Confirm ue4ss/Mods/SquadStatusHUD/enabled.txt and Scripts/main.lua exist.
-5. Start the game normally, load a mission and recruit squad members.
+1. Find your game folder in Steam: right-click the game, then choose
+   Manage > Browse local files. Open StarshipTroopers_UBW > Binaries > Win64.
+2. Download UE4SS_v4.0.0-6-gef15eba8.zip and extract it:
+   https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental-latest/UE4SS_v4.0.0-6-gef15eba8.zip
+3. Copy dwmapi.dll and the ue4ss folder into Win64. Check that dwmapi.dll
+   is beside StarshipTroopers_UBW-Win64-Shipping.exe, with UE4SS.dll inside
+   Win64/ue4ss. Skip this step if this UE4SS build is already installed.
+4. Download Squad Status HUD from Nexus Mods and extract it:
+   https://www.nexusmods.com/starshiptroopersultimatebugwar/mods/15
+5. Copy the mod's ue4ss folder into the same Win64 folder. Merge the folders.
+   Check that Win64/ue4ss/Mods/SquadStatusHUD/Scripts/main.lua exists.
+6. Start the game as usual, load a mission and recruit some troopers.
+   Their names and health bars will appear above the minimap.
 
-The roster shows actual squad names and live blue health bars above the minimap.
-No HP numbers, no gameplay changes. It hides in menus and when no squad is present.
-Configure Left, Bottom and Scale in Scripts/config.lua; restart the game afterward.
-Verified visually at 1920x1080. Other resolutions may need adjustment.
+For example, your Win64 folder might be:
+N:\SteamLibrary\steamapps\common\StarshipTroopers_UltimateBugWar\StarshipTroopers_UBW\Binaries\Win64
+Your drive and install location may be different.
 
-Remove only ue4ss/Mods/SquadStatusHUD to uninstall this mod.
-Keep UE4SS if another mod uses it. For problems, retain ue4ss/UE4SS.log.
+Requires Windows 10/11, Steam build 22832378 and UE4SS. Tested at 1920x1080.
+For help with UE4SS: https://docs.ue4ss.com/installation-guide.html
+
+To move or resize the roster, change Left, Bottom or Scale in
+ue4ss/Mods/SquadStatusHUD/Scripts/config.lua, then restart the game.
+
+To uninstall, close the game and delete ue4ss/Mods/SquadStatusHUD.
+Keep UE4SS if you use it for other mods.
 Made with AI by NEXara. See CREDITS.txt.
