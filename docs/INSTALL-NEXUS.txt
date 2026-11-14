@@ -1,0 +1,24 @@
+Squad Status HUD 1.0.0 — English / Manual Install
+15 November 2026 (15/11/2026)
+
+Requires UE4SS. This archive contains Lua scripts only, with no installer or loader binaries.
+Supported game: Starship Troopers: Ultimate Bug War!, Steam build 22832378.
+
+1. Close the game.
+2. Install UE4SS from its official release:
+   https://github.com/UE4SS-RE/RE-UE4SS/releases
+   Tested build: v4.0.0-6-gef15eba8.
+   Follow the upstream installation instructions. This mod uses the ue4ss/Mods layout.
+3. Copy the included ue4ss folder into:
+   <game folder>/StarshipTroopers_UBW/Binaries/Win64/
+4. Confirm ue4ss/Mods/SquadStatusHUD/enabled.txt and Scripts/main.lua exist.
+5. Start the game normally, load a mission and recruit squad members.
+
+The roster shows actual squad names and live blue health bars above the minimap.
+No HP numbers, no gameplay changes. It hides in menus and when no squad is present.
+Configure Left, Bottom and Scale in Scripts/config.lua; restart the game afterward.
+Verified visually at 1920x1080. Other resolutions may need adjustment.
+
+Remove only ue4ss/Mods/SquadStatusHUD to uninstall this mod.
+Keep UE4SS if another mod uses it. For problems, retain ue4ss/UE4SS.log.
+Made with AI by NEXara. See CREDITS.txt.
