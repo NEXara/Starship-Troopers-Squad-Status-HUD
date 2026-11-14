@@ -12,26 +12,36 @@ A standalone HUD mod for **Starship Troopers: Ultimate Bug War!** by **NEXara**.
 ![Squad roster](docs/images/squad-roster.png)
 ![Live health](docs/images/live-health.png)
 
-## Downloads and installation
+## Installation
 
-**Full Setup (GitHub):** includes the required UE4SS loader. Extract the release ZIP,
-open `Squad-Status-HUD-Setup.exe`, select the game folder and click **Install / Update**.
-Close the game before installing, updating or uninstalling.
-English is the default, with an optional Thai interface using the small **EN / ไทย** button.
+1. Download **[Squad-Status-HUD-1.0.0-Full.zip](https://github.com/NEXara/Starship-Troopers-Squad-Status-HUD/releases/download/v1.0.0/Squad-Status-HUD-1.0.0-Full.zip)** and extract it.
+2. Close the game, then open **Squad-Status-HUD-Setup.exe**.
+3. Select the game's main folder. In Steam, right-click the game → **Manage → Browse local files** to find it. Choose the folder containing **StarshipTroopers_UBW.exe**.
+4. Click **Install / Update**.
+5. Start the game as usual, load a mission and recruit some troopers. Their names and health will appear above the minimap.
 
-**Nexus English package:** manual installation, containing this mod's Lua scripts only.
-Install UE4SS separately, then copy the included `ue4ss` folder into
-`StarshipTroopers_UBW/Binaries/Win64`. See [manual instructions](docs/INSTALL-NEXUS.txt).
+For example, your game folder might be:
+`N:\SteamLibrary\steamapps\common\StarshipTroopers_UltimateBugWar`
+Your drive and folder location may be different.
 
-Requires Windows 10/11 and Steam build **22832378**. Full Setup requires .NET Framework 4.8.
-Tested loader: UE4SS **v4.0.0-6-gef15eba8**. Verified visually at 1920×1080;
-other resolutions and mod combinations may need adjustment.
+The installer includes UE4SS, so you don't need to set it up yourself.
+English is selected by default. Use the **EN / ไทย** button if you prefer Thai.
+
+Requires Windows 10/11, .NET Framework 4.8 and Steam build **22832378**.
+Tested with UE4SS **v4.0.0-6-gef15eba8** at 1920×1080. You may need to adjust the
+position or scale at other resolutions.
+
+You can also find the mod on [Nexus Mods](https://www.nexusmods.com/starshiptroopersultimatebugwar/mods/15).
+Follow the installation steps on that page if you download it there.
 
 ## Configuration and removal
 
 Edit `ue4ss/Mods/SquadStatusHUD/Scripts/config.lua` to adjust `Left`, `Bottom`, or `Scale`.
-Restart the game after changes. Full Setup has an **Uninstall** button; for a manual
-installation, remove only `ue4ss/Mods/SquadStatusHUD`. Keep a shared loader used by other mods.
+Restart the game after saving your changes.
+
+To remove the mod, close the game and click **Uninstall** in the installer.
+If you installed it by copying files yourself, remove `ue4ss/Mods/SquadStatusHUD`.
+Keep UE4SS if you use it for other mods.
 
 ## Also by NEXara
 
