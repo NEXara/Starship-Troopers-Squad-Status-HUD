@@ -1,0 +1,11 @@
+Squad Status HUD 1.0.0
+Made with AI by NEXara.
+
+UE4SS by the UE4SS-RE team and contributors (MIT).
+https://github.com/UE4SS-RE/RE-UE4SS
+Full setup bundles v4.0.0-6-gef15eba8, verified against upstream SHA-256.
+The Nexus manual package contains only this mod; obtain UE4SS separately.
+
+Original game content and trademarks belong to their respective owners.
+Native HUD styling is referenced at runtime. Game assets are not redistributed.
+This is an independent community mod.

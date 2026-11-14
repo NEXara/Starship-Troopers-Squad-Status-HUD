@@ -1,0 +1,22 @@
+Squad Status HUD 1.0.0 — Full Setup
+15 November 2026 (15/11/2026)
+
+1. Close the game and extract this ZIP.
+2. Open Squad-Status-HUD-Setup.exe.
+3. Select the main game folder containing StarshipTroopers_UBW.exe.
+4. Click Install / Update, then start the game normally.
+5. Load a mission and recruit squad members.
+
+The setup includes UE4SS. English is the default; the small EN / ไทย button
+switches the installer and optional HUD labels. Character names come from the game.
+Supported: Windows 10/11, .NET Framework 4.8, Steam build 22832378.
+
+To remove: close the game and choose Uninstall. The setup preserves compatible
+pre-existing loader files and shared files needed by other mods. It reports
+conflicting or modified files instead of overwriting them.
+
+Configuration: StarshipTroopers_UBW/Binaries/Win64/ue4ss/Mods/SquadStatusHUD/Scripts/config.lua
+Adjust Left, Bottom and Scale if needed; restart the game after changes.
+The mod only displays squad names and health. It does not change gameplay.
+Verified visually at 1920x1080. Other resolutions and mod combinations may need adjustment.
+See CREDITS.txt and licenses/UE4SS-MIT.txt.
