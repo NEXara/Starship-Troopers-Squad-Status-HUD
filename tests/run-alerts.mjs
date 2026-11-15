@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const {lua,lauxlib,lualib,to_luastring,to_jsstring}=require('../work/tools/lua-test/node_modules/fengari');
+const state=lauxlib.luaL_newstate();lualib.luaL_openlibs(state);
+const source=fs.readFileSync('squad-hud/mod/Scripts/alerts.lua','utf8');
+const tests=fs.readFileSync('squad-hud/tests/alerts.lua','utf8');
+if(lauxlib.luaL_dostring(state,to_luastring('__alerts=(function()\n'+source+'\nend)()\n'+tests))!==lua.LUA_OK)throw Error(to_jsstring(lua.lua_tostring(state,-1)));
+const assertions=lua.lua_tointeger(state,-1);
+fs.writeFileSync('squad-hud/work/alert-test-results.json',JSON.stringify({passed:true,assertions,scope:'Event transitions; no game process'},null,2));
+console.log('Squad Alerts assertions passed: '+assertions);

@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const {lua,lauxlib,lualib,to_luastring,to_jsstring}=require('../work/tools/lua-test/node_modules/fengari');
+const L=lauxlib.luaL_newstate();
+lualib.luaL_openlibs(L);
+const config=fs.readFileSync('squad-hud/mod/Scripts/config.lua','utf8');
+const harness=fs.readFileSync('squad-hud/tests/hud-runtime.lua','utf8');
+const alertModule=fs.readFileSync('squad-hud/mod/Scripts/alerts.lua','utf8');
+const main=fs.readFileSync(process.argv[2] || 'squad-hud/mod/Scripts/main.lua','utf8');
+const script='__alerts=(function()\n'+alertModule+'\nend)()\n__config=(function()\n'+config+'\nend)()\n'+harness+'\n'+main+'\nreturn verify()';
+const status=lauxlib.luaL_dostring(L,to_luastring(script));
+if(status!==lua.LUA_OK)throw Error(to_jsstring(lua.lua_tostring(L,-1)));
+const assertions=lua.lua_tointeger(L,-1);
+fs.writeFileSync('squad-hud/work/hud-regression-results.json',JSON.stringify({passed:true,assertions,game_process_used:false,scope:'Lua behavioral harness, not a real Unreal Engine runtime test'},null,2)+'\n');
+console.log('HUD behavioral assertions passed: '+assertions);
