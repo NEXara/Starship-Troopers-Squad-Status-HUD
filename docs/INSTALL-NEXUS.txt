@@ -1,5 +1,5 @@
-Squad Status HUD 1.0.0 — Installation
-15 November 2026 (15/11/2026)
+Squad Status HUD 1.1.0 — Installation
+16 November 2026 (16/11/2026)
 
 Close the game before you start.
 
@@ -30,3 +30,7 @@ ue4ss/Mods/SquadStatusHUD/Scripts/config.lua, then restart the game.
 To uninstall, close the game and delete ue4ss/Mods/SquadStatusHUD.
 Keep UE4SS if you use it for other mods.
 Made with AI by NEXara. See CREDITS.txt.
+
+Squad Alerts is included. New members fade in; confirmed deaths get a brief red emphasis.
+Health bars turn red at 30% or less and pulse slowly at 15% or less.
+Low health does not display a text notification.

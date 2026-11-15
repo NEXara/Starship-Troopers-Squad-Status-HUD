@@ -9,8 +9,8 @@ Clone this repository into a folder named `squad-hud`, then run the following co
 4. Use the exact UE4SS-settings.ini supplied in the source release (console, GUI console and hot reload disabled).
 5. Run `powershell -File squad-hud/assets/build-icon.ps1`.
 6. Run `node squad-hud/build.mjs`.
-7. Run `squad-hud/outputs/Squad-Status-HUD-Setup.exe --self-test` (29 file ownership and installation assertions).
+7. Run `squad-hud/outputs/Squad-Status-HUD-1.1.0-Setup.exe --self-test` (33 file ownership and installation assertions).
 
-The output is squad-hud/outputs/Squad-Status-HUD-Setup.exe.
+The output is squad-hud/outputs/Squad-Status-HUD-1.1.0-Setup.exe.
 Lua files are loaded directly by UE4SS; no compilation is needed for the Nexus manual package.
 The source release includes exact loader inputs and the Lua test harness for reproducibility.
