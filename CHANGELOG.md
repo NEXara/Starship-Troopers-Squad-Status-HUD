@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0 — 16 November 2026 (16/11/2026)
+
+- Squad Alerts for new members and confirmed deaths; low health changes the bar to red.
+- Subtle join and death animations, fading notifications and a slow pulse below 15% health.
+- Squad Alerts is included as part of the HUD; timing and placement can be adjusted in config.lua.
+
 ## 1.0.0 — 15 November 2026 (15/11/2026)
 
 - Squad roster with character names and live health bars in the native blue HUD style.

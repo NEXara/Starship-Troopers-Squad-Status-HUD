@@ -1,4 +1,4 @@
-Squad Status HUD 1.0.0
+Squad Status HUD 1.1.0
 Made with AI by NEXara.
 
 UE4SS by the UE4SS-RE team and contributors (MIT).
