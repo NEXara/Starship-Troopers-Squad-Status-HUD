@@ -1,10 +1,12 @@
--- Squad Status HUD, 1.0.0. Made with AI by NEXara.
+-- Squad Status HUD, 1.1.0. Made with AI by NEXara.
 -- Reads the player's real squad. No gameplay values are written.
 local directory = debug.getinfo(1, "S").source:sub(2):match("^(.*[/\\])")
 local config = dofile(directory .. "config.lua")
-local state = { host = nil, player = nil, canvas = nil, rows = {}, scanAt = 0, faults = 0, lastReport = "", reportAt = 0 }
-local messages = { en = { squad = "SQUAD", unknown = "Unknown", health = "HP", empty = "No squad members", unavailable = "HP unavailable" },
-                   th = { squad = "ทีม", unknown = "ไม่ทราบชื่อ", health = "พลังชีวิต", empty = "ยังไม่มีสมาชิกทีม", unavailable = "ยังอ่านพลังชีวิตไม่ได้" } }
+local Alerts = dofile(directory .. "alerts.lua")
+local alertTracker = Alerts.new(config)
+local state = { host = nil, player = nil, canvas = nil, rows = {}, alertWidgets = {}, alertEvents = {}, clock = os.time(), scanAt = 0, faults = 0, lastReport = "", reportAt = 0 }
+local messages = { en = { squad = "SQUAD", unknown = "Unknown", health = "HP", empty = "No squad members", unavailable = "HP unavailable", joined = "Joined squad: ", died = "Trooper lost: " },
+                   th = { squad = "ทีม", unknown = "ไม่ทราบชื่อ", health = "พลังชีวิต", empty = "ยังไม่มีสมาชิกทีม", unavailable = "ยังอ่านพลังชีวิตไม่ได้", joined = "เข้าร่วมทีม: ", died = "เสียชีวิต: " } }
 local text = messages[config.Language] or messages.en
 local function log(value) print("[SquadStatusHUD] " .. tostring(value) .. "\n") end
 local function report(value)
@@ -30,6 +32,9 @@ local function toString(value)
     return ok and result or ""
 end
 local function hide()
+    for _, widget in ipairs(state.alertWidgets) do
+        if valid(widget) then widget:SetVisibility(1) end
+    end
     for _, row in ipairs(state.rows) do
         for _, widget in ipairs(row.widgets) do
             if valid(widget) then widget:SetVisibility(1) end -- Collapsed
@@ -37,6 +42,11 @@ local function hide()
     end
 end
 local function clear()
+    for _, widget in ipairs(state.alertWidgets) do
+        if valid(widget) then pcall(function() widget:RemoveFromParent() end) end
+    end
+    state.alertWidgets, state.alertEvents = {}, {}
+    alertTracker:reset()
     for _, row in ipairs(state.rows) do
         for _, widget in ipairs(row.widgets) do
             if valid(widget) then pcall(function() widget:RemoveFromParent() end) end
@@ -59,7 +69,11 @@ end
 local function acquire()
     if valid(state.host) and valid(state.canvas) and visible(state.host) then
         local player = findPlayer(state.host)
-        if valid(player) then state.player = player; return true end
+        if valid(player) then
+            local same = state.player == player
+            pcall(function() same = state.player:GetFullName() == player:GetFullName() end)
+            if not same then clear(); state.scanAt = 0 else state.player = player; return true end
+        end
     end
     if state.host ~= nil then clear() end
     -- Discovery is throttled; never enumerate all actors every refresh.
@@ -205,12 +219,47 @@ local function readSquad()
                 end
                 if name == "" then name = text.unknown end
                 local known = health ~= nil and maximum ~= nil and maximum > 0
-                roster[#roster + 1] = { name = name, hp = health, max = maximum, known = known }
+                local key = tostring(actor)
+                pcall(function() key = actor:GetFullName() end)
+                roster[#roster + 1] = { key = key, actor = actor, name = name, hp = health, max = maximum, known = known }
                 details[#details + 1] = name .. ":" .. tostring(health) .. "/" .. tostring(maximum) .. " [" .. healthSource .. "]"
             end
         end
     end)
     return roster, "members=" .. tostring(#members) .. "; rows=" .. tostring(#roster) .. "; " .. table.concat(details, ", ")
+end
+local function renderAlerts(events, rosterCount)
+    state.alertEvents = events
+    local scale = math.max(0.5, math.min(4, tonumber(config.Scale) or 2))
+    local bottom = tonumber(config.AlertBottom) or (config.Bottom + rosterCount * config.RowHeight * scale + 24)
+    for index, event in ipairs(events) do
+        local widget = state.alertWidgets[index]
+        if not valid(widget) then
+            widget = addWidget("TextBlock", config.Left + 10 * scale, 0,
+                config.Width * scale, 60 * scale, 53, function(label)
+                    local source = valid(state.styleSource) and property(state.styleSource, "Enemy_Name_Text") or nil
+                    if valid(source) then label.Font = source.Font end
+                end)
+            state.alertWidgets[index] = widget
+            local font = widget.Font
+            font.Size = math.floor((tonumber(config.AlertFontSize) or 13) * scale + 0.5)
+            widget:SetFont(font)
+            widget:SetAutoWrapText(true)
+            widget:SetShadowColorAndOpacity({ R = 0, G = 0, B = 0, A = 1 })
+            widget:SetShadowOffset({ X = 1, Y = 1 })
+        end
+        local color = event.kind == "died" and { R = 1, G = 0.35, B = 0.3, A = 1 }
+            or { R = 0.55, G = 0.85, B = 1, A = 1 }
+        widget:SetColorAndOpacity({ SpecifiedColor = color, ColorUseRule = 0 })
+        widget.Slot:SetPosition({ X = config.Left + 10 * scale, Y = -bottom - (#events - index + 1) * 62 * scale })
+        widget:SetText(FText((text[event.kind] or "") .. event.name))
+        widget:SetVisibility(3)
+    end
+end
+local function confirmedDeath(actor)
+    if not valid(actor) then return false end
+    local hp = liveHealth(actor)
+    return hp ~= nil and hp <= 0
 end
 local function update()
     if not acquire() then return end
@@ -219,10 +268,16 @@ local function update()
     local hud = valid(controller) and controller:GetHUD() or nil
     if valid(hud) then
         local ok, uiMode = pcall(function() return hud:IsUIMode() end)
-        if ok and uiMode then report("Hidden in UI mode; " .. summary); hide(); return end
+        if ok and uiMode then
+            alertTracker:update(roster, math.max(state.clock, os.time()), true)
+            report("Hidden in UI mode; " .. summary); hide(); return
+        end
     end
     report("HUD active; " .. summary)
     hide()
+    state.clock = math.max(state.clock, os.time())
+    local events = alertTracker:update(roster, state.clock, false, confirmedDeath)
+    renderAlerts(events, #roster)
     if #roster == 0 and config.ShowEmptyStatus then
         local row = rowAt(1, 1)
         row.label:SetText(FText(text.squad .. " — " .. text.empty))
@@ -234,16 +289,53 @@ local function update()
     for index, member in ipairs(roster) do
         local row = rowAt(index, #roster)
         for _, widget in ipairs(row.widgets) do widget:SetVisibility(3) end
+        row.joinedAt, row.diedAt = nil, nil
+        for _, event in ipairs(events) do
+            if event.key == member.key then
+                if event.kind == "joined" then row.joinedAt = event.started end
+                if event.kind == "died" then row.diedAt = event.started end
+            end
+        end
+        row.ratio = member.known and math.max(0, math.min(1, member.hp / member.max)) or nil
         row.label:SetText(FText(member.name))
+        row.label:SetColorAndOpacity({SpecifiedColor = row.ratio == 0
+            and {R=1,G=0.4,B=0.35,A=1} or {R=0.94,G=0.97,B=1,A=1}, ColorUseRule=0})
         if member.known then
-            row.bar:SetPercent(math.max(0, math.min(1, member.hp / member.max)))
+            local ratio = math.max(0, math.min(1, member.hp / member.max))
+            local threshold = math.max(0.01, math.min(0.9, tonumber(config.LowHealthThreshold) or 0.30))
+            row.bar:SetPercent(ratio)
+            row.bar:SetFillColorAndOpacity(ratio <= threshold
+                and { R = 1, G = 0.15, B = 0.12, A = 1 }
+                or { R = 0.15, G = 0.45, B = 0.95, A = 1 })
         else
             row.bar:SetVisibility(1)
         end
     end
 end
+local function animate()
+    state.clock = math.max(state.clock + 0.05, os.time())
+    -- This loop only paints existing widgets. Squad/health discovery stays at 250 ms.
+    for _, row in ipairs(state.rows) do
+        local opacity = row.joinedAt and (0.55 + 0.45 * math.min(1, math.max(0, state.clock-row.joinedAt)/0.65)) or 1
+        if row.ratio == 0 then
+            local age = row.diedAt and state.clock-row.diedAt or 2
+            opacity = age < 1.8 and (0.65 + 0.35 * (0.5 + 0.5 * math.cos(age*math.pi*2/0.9))) or 0.6
+        end
+        if valid(row.frame) then row.frame:SetRenderOpacity(opacity) end
+        if valid(row.label) then row.label:SetRenderOpacity(opacity) end
+        if valid(row.bar) then row.bar:SetRenderOpacity(opacity * Alerts.healthOpacity(row.ratio,state.clock)) end
+    end
+    for index, widget in ipairs(state.alertWidgets) do
+        local event = state.alertEvents[index]
+        if event and valid(widget) then
+            local opacity, offset = Alerts.visual(event,state.clock)
+            widget:SetRenderOpacity(opacity)
+            widget:SetRenderTranslation({X=offset,Y=0})
+        end
+    end
+end
 assert(type(LoopInGameThreadWithDelay) == "function", "Squad Status HUD requires UE4SS 4.x")
-log("0.1.3 experimental loaded; language=" .. config.Language .. "; awaiting gameplay")
+log("1.1.0 loaded; language=" .. config.Language .. "; awaiting gameplay")
 state.loop = LoopInGameThreadWithDelay(config.RefreshMs, function()
     local ok, err = pcall(update)
     if not ok then
@@ -253,5 +345,13 @@ state.loop = LoopInGameThreadWithDelay(config.RefreshMs, function()
         state.scanAt = os.time() + 5
     else
         state.faults = 0
+    end
+end)
+
+state.animationLoop = LoopInGameThreadWithDelay(50, function()
+    local ok, err = pcall(animate)
+    if not ok and not state.animationWarning then
+        state.animationWarning = true
+        log("Animation unavailable; roster remains active: " .. tostring(err))
     end
 end)
