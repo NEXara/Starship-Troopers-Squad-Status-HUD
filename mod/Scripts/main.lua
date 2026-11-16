@@ -1,4 +1,4 @@
--- Squad Status HUD, 1.1.0. Made with AI by NEXara.
+-- Squad Status HUD, 1.1.1. Made with AI by NEXara.
 -- Reads the player's real squad. No gameplay values are written.
 local directory = debug.getinfo(1, "S").source:sub(2):match("^(.*[/\\])")
 local config = dofile(directory .. "config.lua")
@@ -19,6 +19,22 @@ local function valid(object)
     if object == nil then return false end
     local ok, result = pcall(function() return object:IsValid() end)
     return ok and result
+end
+-- The enemy nameplate font can be unavailable when this HUD first attaches.
+-- Never leave Thai notices on TextBlock's default Latin-only fallback font.
+local thaiFont, thaiFontChecked
+local function noticeFont()
+    if config.Language ~= "th" then return nil end
+    if not thaiFontChecked then
+        thaiFontChecked = true
+        local path = "/Game/UI/Font/Noto_Sans/static/NotoSans-Medium_Font.NotoSans-Medium_Font"
+        thaiFont = StaticFindObject(path)
+        if not valid(thaiFont) and LoadAsset then
+            local ok, loaded = pcall(LoadAsset, path)
+            if ok then thaiFont = loaded end
+        end
+    end
+    return valid(thaiFont) and thaiFont or nil
 end
 local function property(object, name)
     local ok, result = pcall(function() return object[name] end)
@@ -242,6 +258,11 @@ local function renderAlerts(events, rosterCount)
                 end)
             state.alertWidgets[index] = widget
             local font = widget.Font
+            local thai = noticeFont()
+            if thai then
+                font.FontObject = thai
+                font.TypefaceFontName = FName("Default")
+            end
             font.Size = math.floor((tonumber(config.AlertFontSize) or 13) * scale + 0.5)
             widget:SetFont(font)
             widget:SetAutoWrapText(true)
