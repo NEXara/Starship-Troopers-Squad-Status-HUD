@@ -17,8 +17,8 @@ A standalone HUD mod for **Starship Troopers: Ultimate Bug War!** by **NEXara**.
 
 ## Installation
 
-1. Download **[Squad-Status-HUD-1.1.0-Full.zip](https://github.com/NEXara/Starship-Troopers-Squad-Status-HUD/releases/download/v1.1.0/Squad-Status-HUD-1.1.0-Full.zip)** and extract it.
-2. Close the game, then open **Squad-Status-HUD-1.1.0-Setup.exe**.
+1. Download **[Squad-Status-HUD-1.1.1-Full.zip](https://github.com/NEXara/Starship-Troopers-Squad-Status-HUD/releases/download/v1.1.1/Squad-Status-HUD-1.1.1-Full.zip)** and extract it.
+2. Close the game, then open **Squad-Status-HUD-1.1.1-Setup.exe**.
 3. Select the game's main folder. In Steam, right-click the game → **Manage → Browse local files** to find it. Choose the folder containing **StarshipTroopers_UBW.exe**.
 4. Click **Install / Update**.
 5. Start the game as usual, load a mission and recruit some troopers. Their names and health will appear above the minimap.
@@ -59,4 +59,4 @@ Made with AI by NEXara. UE4SS by the UE4SS-RE team and contributors (MIT).
 Native game assets are referenced at runtime and are not included in the downloads.
 See [credits](CREDITS.txt). Independent community mod, not affiliated with the game's creators.
 
-Release **1.1.0** · Updated **16 November 2026 (16/11/2026)**.
+Release **1.1.1** · Updated **17 November 2026 (17/11/2026)**.

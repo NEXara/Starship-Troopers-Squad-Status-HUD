@@ -1,3 +1,9 @@
+## 1.1.1 — 17 November 2026 (17/11/2026)
+
+- Select a Unicode font explicitly for Thai squad notices instead of leaving them on the default TextBlock font when the native nameplate is unavailable.
+- English remains the default. No roster, animation or gameplay changes.
+- Thai and English behavior tests passed; actual game confirmation pending.
+
 # Changelog
 
 ## 1.1.0 — 16 November 2026 (16/11/2026)

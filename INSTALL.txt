@@ -1,8 +1,8 @@
-Squad Status HUD 1.1.0 — Full Setup
-16 November 2026 (16/11/2026)
+Squad Status HUD 1.1.1 — Full Setup
+17 November 2026 (17/11/2026)
 
 1. Close the game and extract this ZIP.
-2. Open Squad-Status-HUD-1.1.0-Setup.exe.
+2. Open Squad-Status-HUD-1.1.1-Setup.exe.
 3. Select the main game folder containing StarshipTroopers_UBW.exe.
 4. Click Install / Update, then start the game normally.
 5. Load a mission and recruit squad members.

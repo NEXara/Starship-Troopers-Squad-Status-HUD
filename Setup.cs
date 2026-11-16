@@ -11,13 +11,13 @@ using System.Windows.Forms;
 using System.Web.Script.Serialization;
 [assembly: AssemblyTitle("Squad Status HUD Setup")]
 [assembly: AssemblyCompany("NEXara")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.1.0")]
+[assembly: AssemblyFileVersion("1.1.1.0")]
 
 public class OwnedFile { public string Hash; public bool Owned; }
 public class Receipt { public string Root,Version; public Dictionary<string,OwnedFile> Files=new Dictionary<string,OwnedFile>(); }
 public class Installer {
- public const string Version="1.1.0";
+ public const string Version="1.1.1";
  public const string Mod="ue4ss/Mods/SquadStatusHUD/";
  readonly string game,bin; readonly bool fixture;
  readonly JavaScriptSerializer json=new JavaScriptSerializer();
@@ -67,9 +67,9 @@ public class SetupForm:Form {
   install.SetBounds(24,383,656,44);install.BackColor=Color.FromArgb(25,106,204);install.ForeColor=Color.White;install.FlatStyle=FlatStyle.Flat;install.Click+=(s,e)=>Run(false);
   remove.SetBounds(365,440,180,32);remove.Click+=(s,e)=>Run(true);
   check.SetBounds(24,440,145,32);check.Click+=(s,e)=>{try{status.Text=new Installer(folder.Text).Check(false);}catch(Exception ex){status.Text=ex.Message;}};
-  info.SetBounds(181,440,170,32);info.Click+=(s,e)=>MessageBox.Show(T("Made with AI by NEXara.\nUE4SS by the UE4SS-RE team and contributors (MIT).\nOriginal game content belongs to its owners.\n\n1.1.0 • Steam build 22832378.\nNo dependency on the Thai translation mod.\nLanguage switch also selects optional HUD labels for a new install.","Made with AI by NEXara\nUE4SS โดยทีม UE4SS-RE และผู้ร่วมพัฒนา (MIT)\nเกมเป็นของเจ้าของสิทธิ์เดิม\n\n1.1.0 • Steam build 22832378\nไม่ต้องใช้ม็อดแปลไทย\nภาษาที่เลือกใช้กับข้อความเสริมบน HUD ตอนติดตั้งด้วย"),"Information / ข้อมูล",MessageBoxButtons.OK,MessageBoxIcon.Information);
+  info.SetBounds(181,440,170,32);info.Click+=(s,e)=>MessageBox.Show(T("Made with AI by NEXara.\nUE4SS by the UE4SS-RE team and contributors (MIT).\nOriginal game content belongs to its owners.\n\n1.1.1 • Steam build 22832378.\nNo dependency on the Thai translation mod.\nLanguage switch also selects optional HUD labels for a new install.","Made with AI by NEXara\nUE4SS โดยทีม UE4SS-RE และผู้ร่วมพัฒนา (MIT)\nเกมเป็นของเจ้าของสิทธิ์เดิม\n\n1.1.1 • Steam build 22832378\nไม่ต้องใช้ม็อดแปลไทย\nภาษาที่เลือกใช้กับข้อความเสริมบน HUD ตอนติดตั้งด้วย"),"Information / ข้อมูล",MessageBoxButtons.OK,MessageBoxIcon.Information);
   status.SetBounds(24,487,656,85);status.Multiline=true;status.ReadOnly=true;status.ScrollBars=ScrollBars.Vertical;status.BackColor=Color.White;
-  credit.SetBounds(24,592,656,25);credit.ForeColor=Color.DimGray;credit.Text="Made with AI by NEXara  •  1.1.0  •  16 November 2026 (16/11/2026)";
+  credit.SetBounds(24,592,656,25);credit.ForeColor=Color.DimGray;credit.Text="Made with AI by NEXara  •  1.1.1  •  17 November 2026 (17/11/2026)";
   var badge=new PictureBox{Bounds=new Rectangle(24,25,42,42),SizeMode=PictureBoxSizeMode.Zoom,Image=Image.FromStream(new MemoryStream(Installer.Resource("app.image")))};Controls.Add(badge);foreach(var b in new[]{language,browse,remove,check,info}){b.FlatStyle=FlatStyle.Flat;b.FlatAppearance.BorderColor=Color.FromArgb(64,83,111);b.BackColor=Color.FromArgb(28,40,59);b.ForeColor=Color.FromArgb(224,235,250);}foreach(var b in new[]{check,info,remove}){b.FlatAppearance.BorderSize=0;b.BackColor=BackColor;b.ForeColor=Color.FromArgb(112,177,255);}install.FlatAppearance.BorderSize=0;install.Font=new Font("Segoe UI",11,FontStyle.Bold);status.BorderStyle=BorderStyle.FixedSingle;status.BackColor=Color.FromArgb(23,33,49);status.ForeColor=Color.FromArgb(184,204,230);credit.Font=new Font("Segoe UI",8);credit.ForeColor=Color.FromArgb(151,172,201);Controls.AddRange(new Control[]{language,title,subtitle,features,pathLabel,folder,browse,install,remove,check,info,status,credit,example});folder.Text=Detect();Translate();
  }
  public void UseThai(){thai=true;Translate();}
